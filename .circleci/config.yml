@@ -73,8 +73,9 @@ jobs:
       - run:
           name: Analyse front-end package
           command: |
-            cd backend
+            cd frontend
             npm install
+            npm audit fix --audit-level=critical --force
             npm audit --audit-level=critical
 
   scan-backend:
