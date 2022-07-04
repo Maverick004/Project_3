@@ -19,32 +19,8 @@
         timeout: 600
 
     - name: "install python for Ansible."
-      raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
-
-      - name: "update apt packages."
-        apt:
-          update_cache: yes
-
-      - name: "upgrade packages"
-        apt:
-          upgrade: yes
-
-      - name: remove dependencies that are no longer required
-        apt:
-          autoremove: yes
-
-      - name: "install dependencies."
-        apt:
-          name: ["nodejs", "npm"]
-          state: latest
-          update_cache: yes
-
-      - name: "install pm2"
-        npm:
-          name: pm2
-          global: yes
-          production: yes
-          state: present
+      raw: test -e /usr/bin/python3 || (apt -y update && apt install -y python3)
+      changed_when: false
 
   # Get the environment variables from CircleCI and add to the EC2 instance
   environment:
@@ -59,4 +35,5 @@
     - TYPEORM_MIGRATIONS_DIR: "{{ lookup('env', 'TYPEORM_MIGRATIONS_DIR')}}"
 
   roles:
+    configure-prometheus-node-exporter
     configure-server
