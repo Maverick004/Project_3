@@ -145,7 +145,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project_3/.circleci/ansible/inventory.txt
+            - Project_3/.circleci/ansible/inventory.txt
 
       - run:
           name: Rollback upon failure
@@ -161,19 +161,23 @@ jobs:
         fingerprints: ["42:0f:9c:c5:2c:e6:39:05:bf:7b:b6:1b:48:0b:6d:fe"]
       - attach_workspace:
           at: ~/
-      - run: ~/project_3/.circleci/ansible/inventory.txt
+      - run: ~/Project_3/.circleci/ansible/inventory.txt
 
       - run:
           name: Install dependencies
           command: |
-            # Your code here
-            exit 1
+            yum -y install tar gzip
+            apk add --update ansible
+
       - run:
           name: Configure server
           command: |
-            # Your code here
-            exit 1
-      # Here's where you will add some code to rollback on failure      
+            ansible-playbook -i inventory.txt configure-server.yml
+
+      - run:
+          name: Rollback upon failure
+          command: |
+            destroy-environment
 
 
 
@@ -195,3 +199,5 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
+      - configure-infrastructure:
+          requires: [deploy-infrastructure]
