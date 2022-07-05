@@ -163,8 +163,7 @@ jobs:
       - run:
           name: Install dependencies
           command: |
-            apk add --update ansible tar gzip
-            apk add --no-cache aws-cli
+            apk add --update ansible tar gzip awscli
 
       - run:
           name: Configure server
