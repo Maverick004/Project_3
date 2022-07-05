@@ -4,7 +4,7 @@ commands:
   destroy-environment:
     description: Destroy back-end and front-end cloudformation stacks given a workflow ID.
     parameters:
-      # Add parameter here   
+      # Add parameter here
     steps:
       - run:
           name: Destroy environments
@@ -138,10 +138,12 @@ jobs:
       - run:
           name: Add back-end ip to ansible inventory
           command: |
-            aws ec2 describe-instances \
+
+            # aws ec2 describe-instances \
+            echo $(aws ec2 describe-instances \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --filters Name=tag:aws:cloudformation:stack-name,Values=udapeople-backend-${CIRCLE_WORKFLOW_ID:0:7} \
-            --output text >> ~/project/.circleci/inventory.txt
+            --output text) >> ~/project/.circleci/inventory.txt
             cat ~/project/.circleci/ansible/inventory.txt
 
       - persist_to_workspace:
