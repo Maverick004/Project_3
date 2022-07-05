@@ -1,11 +1,10 @@
 ---
-
-- name: "configuration play." 
+- name: "configuration play."
   hosts: web
   user: ubuntu
   become: true
   become_method: sudo
-  become_user: root  
+  # become_user: root
   gather_facts: false
   vars:
     - ansible_python_interpreter: /usr/bin/python3
@@ -37,5 +36,4 @@
     - setup:
 
   roles:
-    configure-prometheus-node-exporter
     configure-server
