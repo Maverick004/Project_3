@@ -28,3 +28,4 @@
     #global: yes
     #state: latest
     #production: yes
+    #npm install pm2 -g
