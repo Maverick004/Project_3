@@ -324,11 +324,11 @@ jobs:
 
             npm install
             npm run build
-            cd .circleci/ansible
+            cd ..
             tar -C backend -czvf artifact.tar.gz .
+            cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
-            printenv
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
