@@ -18,19 +18,8 @@
     state: latest
     update_cache: yes
 
-- name: 'install pm2'
-  become: yes
-  shell: |
-    npm i -g pm2
-
 - name: extract artifact
   become: yes
   unarchive:
     src: files/artifact.tar.gz
     dest: .
-
-- name: start app
-  become: yes
-  shell: |
-    pm2 stop default
-    pm2 start npm -- start
