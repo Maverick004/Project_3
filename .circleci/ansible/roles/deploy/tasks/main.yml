@@ -18,6 +18,14 @@
     state: latest
     update_cache: yes
 
+- name: 'install pm2'
+  become: yes
+  npm:
+    name: pm2
+    global: yes
+    state: present
+    production: yes
+
 - name: extract artifact
   become: yes
   unarchive:
@@ -27,8 +35,5 @@
 - name: start app
   become: yes
   shell: |
-    npm i
-    npm install pm2 -g
-    npm run build
     pm2 stop default
     pm2 start npm -- start
