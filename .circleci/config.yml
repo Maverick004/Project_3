@@ -17,6 +17,25 @@ commands:
             aws s3 rb s3://udapeople-<< parameters.workflow_id >> --force
             aws cloudformation delete-stack --stack-name "udapeople-<< parameters.workflow_id >>"
 
+  revert-migrations:
+    description: Reverts the the last database migration to a clean slate.
+    parameters:
+      workflow_id:
+        type: string
+        default: ${CIRCLE_WORKFLOW_ID:0:7}
+    steps:
+      - run:
+          name: Revert migrations
+          when: on_fail
+          command: |
+            SUCCESS=$(curl --insecure  https://kvdb.io/BtyGwTRQwxKEHw8w8deLz3/migration_<< parameters.workflow_id >>)
+            if (( $SUCCESS == 1 ));
+            then
+                cd ~/project/backend
+                npm install
+                npm run migration:revert
+            fi
+
 jobs:
   build-frontend:
     docker:
@@ -404,6 +423,8 @@ jobs:
             else
               echo "No delete stack"
             fi
+
+
 
 workflows:
   default:
