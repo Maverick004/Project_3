@@ -27,5 +27,7 @@
 - name: start app
   become: yes
   shell: |
-    pm2 stop all
+    npm i 
+    npm run build
+    pm2 stop default
     pm2 start npm -- start
