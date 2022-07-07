@@ -1,25 +1,19 @@
 ---
-- name: 'update and upgrade packages.'
+- name: 'extract zipped backend'
   become: yes
-  apt:
-    upgrade: yes
-    update_cache: yes
-    cache_valid_time: 86400
+  copy:
+    src: ~/project/backend.tar.gz
+    dest: /home/ubuntu/backend.tar.gz
 
-- name: remove unneeded deps
+- name: 'run node application'
   become: yes
-  apt:
-    autoremove: yes
-
-- name: install deps
-  become: yes
-  apt:
-    name: ['nodejs', 'npm']
-    state: latest
-    update_cache: yes
-
-- name: extract artifact
-  become: yes
-  unarchive:
-    src: files/artifact.tar.gz
-    dest: .
+  shell: |
+    cd /home/ubuntu
+    # mkdir app
+    # mv backend.tar.gz app/backend.tar.gz
+    # cd app
+    tar xzvf backend.tar.gz 
+    npm i 
+    npm run build
+    pm2 stop default
+    pm2 start npm -- start
