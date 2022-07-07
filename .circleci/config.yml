@@ -293,54 +293,31 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      - run:
-          name: Install SSH
-          command: |
-            apk add openssh
-      - run:
-          name: Install tar and gzip
-          command: |
-            apk add tar gzip
+      # Add ssh keys with fingerprint
       - add_ssh_keys:
           fingerprints:
-            - '42:0f:9c:c5:2c:e6:39:05:bf:7b:b6:1b:48:0b:6d:fe'
+            - 'ab:52:25:68:df:4c:3a:d5:48:18:55:d8:f9:3b:df:de'
+      # attach workspace
       - attach_workspace:
           at: ~/
       - run:
-          name: Install node and python dependencies
+          name: Install dependencies
           command: |
-            apk add curl bash
-            apk add --update nodejs npm
-            # yum install python3 -y
-      - run:
-          name: Install Ansible
-          command: |
-            apk add --update ansible
-
+            apk add --update --no-cache tar gzip nodejs npm tree aws-cli ansible
       - run:
           name: Deploy backend
           command: |
             # your code here
             cd backend
-            touch .env
-            echo ENVIRONMENT=production > ".env"
-            echo TYPEORM_CONNECTION=postgres >> ".env"
-            echo TYPEORM_ENTITIES=./src/modules/domain/**/*.entity.ts >> ".env"
-            echo TYPEORM_MIGRATIONS=./src/migrations/*.ts >> ".env"
-            echo TYPEORM_MIGRATIONS_DIR=./src/migrations >> ".env"
-            echo NODE_ENV=production >> ".env"
-            echo TYPEORM_HOST=$TYPEORM_HOST >> ".env"
-            echo TYPEORM_PORT=$TYPEORM_PORT >> ".env"
-            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> ".env"
-            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
-            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
-
             npm install
             npm run build
             cd ..
             tar -C backend -czvf artifact.tar.gz .
+            tree -afC /root/project/.circleci -I *node_modules*
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible
-            echo "Contents  of the inventory.txt file is -------"
+            echo "Contents of the inventory.txt file is ------$(tail -1 inventory.txt)"
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure
