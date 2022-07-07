@@ -293,16 +293,29 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      # Add ssh keys with fingerprint
+      - run:
+          name: Install SSH
+          command: |
+            apk add openssh
+      - run:
+          name: Install tar and gzip
+          command: |
+            apk add tar gzip
       - add_ssh_keys:
-          fingerprints: ["42:0f:9c:c5:2c:e6:39:05:bf:7b:b6:1b:48:0b:6d:fe"]
-      # attach workspace
+          fingerprints:
+            - '42:0f:9c:c5:2c:e6:39:05:bf:7b:b6:1b:48:0b:6d:fe'
       - attach_workspace:
           at: ~/
       - run:
-          name: Install dependencies
+          name: Install node and python dependencies
           command: |
-            apk add --update --no-cache tar gzip nodejs npm tree aws-cli ansible
+            apk add curl bash
+            apk add --update nodejs npm
+            # yum install python3 -y
+      - run:
+          name: Install Ansible
+          command: |
+            apk add --update ansible
 
       - run:
           name: Deploy backend
@@ -325,7 +338,7 @@ jobs:
             npm install
             npm run build
             cd ..
-            tar -C backend -czvf artifact.tar.gz
+            tar -C backend -czvf artifact.tar.gz .
             cd .circleci/ansible
             echo "Contents  of the inventory.txt file is -------"
             cat inventory.txt
