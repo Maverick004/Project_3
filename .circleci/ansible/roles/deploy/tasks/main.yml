@@ -1,23 +1,4 @@
 ---
-- name: 'update and upgrade packages.'
-  become: yes
-  apt:
-    upgrade: yes
-    update_cache: yes
-    cache_valid_time: 86400
-
-- name: 'remove unneeded dependencies'
-  become: yes
-  apt:
-    autoremove: yes
-
-- name: 'install dependencies'
-  become: yes
-  apt:
-    name: ['nodejs', 'npm']
-    state: latest
-    update_cache: yes
-
 - name: extract zipped backend
   become: yes
   copy:
@@ -29,9 +10,9 @@
   shell: |
     cd /home/ubuntu
     # mkdir app
-    # mv backend.tar.gz app/backend.tar.gz
+    # mv artifact.tar.gz app/artifact.tar.gz
     # cd app
-    tar xzvf artifact.tar.gz 
+    tar xzvf artifact.tar.gz
     npm i 
     npm run build
     pm2 stop default
