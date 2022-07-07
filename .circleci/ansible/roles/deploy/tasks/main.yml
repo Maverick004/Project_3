@@ -20,11 +20,8 @@
 
 - name: 'install pm2'
   become: yes
-  npm:
-    name: pm2
-    global: yes
-    state: present
-    production: yes
+  shell: |
+    npm i -g pm2
 
 - name: extract artifact
   become: yes
