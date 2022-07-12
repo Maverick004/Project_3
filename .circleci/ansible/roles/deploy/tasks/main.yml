@@ -16,15 +16,12 @@
   apt:
     name: ['nodejs', 'npm']
     state: latest
-    update_cache: yes
 
 - name: install pm2
   become: yes
   npm:
     name: pm2
     global: yes
-    state: latest
-    production: yes
 
 - name: extract artifact
   become: yes
