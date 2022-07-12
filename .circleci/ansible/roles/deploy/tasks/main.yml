@@ -6,7 +6,7 @@
 
 - name: "Unarchive backend files"
   unarchive:
-    src: artifact.tar.gz
+    src: backend/artifact.tar.gz
     dest: ~/backend-app
 
 - name: "Installing Node Dependencies"
@@ -21,10 +21,6 @@
     pm2 stop default
     pm2 start main.js
   register: execute_node
-
-- name: print message
-  debug:
-    msg: "{{ execute_node.stdout_lines }}"
 
 - name: "Configure pm2 to start as service"
   shell: |
