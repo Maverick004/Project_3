@@ -169,14 +169,10 @@ jobs:
 
   deploy-infrastructure:
     docker:
-      - image: amazon/aws-cli
+      - image: cimg/node:13.8.0
     steps:
       - checkout
-
-      - run:
-          name: Install unzip utility
-          command: 
-            yum -y install tar gzip
+      - install_awscli
 
       - run:
           name: Ensure back-end infrastructure exists
@@ -215,7 +211,7 @@ jobs:
 
   configure-infrastructure:
     docker:
-      - image: python:3.10-alpine3.16
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - install_awscli
@@ -246,7 +242,7 @@ jobs:
 
   run-migrations:
     docker:
-      - image: circleci/node:13.8.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - install_awscli
@@ -273,7 +269,7 @@ jobs:
     docker:
       # Docker image here that supports AWS CLI
       # - image: amazon/aws-cli
-      - image: circleci/node:13.8.0
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - install_awscli
@@ -315,7 +311,7 @@ jobs:
   deploy-backend:
     docker:
       # Docker image here that supports Ansible
-      - image: python:3.10-alpine3.16
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - install_awscli
@@ -366,7 +362,7 @@ jobs:
   smoke-test:
     docker:
       # Lightweight Docker image
-      - image: python:3.10-alpine3.16
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - install_awscli
@@ -410,7 +406,7 @@ jobs:
   cloudfront-update:
     docker:
       # Docker image here that supports AWS CLI
-      - image: amazon/aws-cli
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - install_awscli
@@ -441,10 +437,8 @@ jobs:
 
   cleanup:
     docker:
-      - image: amazon/aws-cli
-      # Docker image here
+      - image: cimg/node:13.8.0
     steps:
-      # Checkout code from git
       - checkout
       - install_awscli
       - install_nodejs
@@ -467,7 +461,7 @@ jobs:
 
   add-prometheus-node-exporter:
     docker:
-      - image: python:3.10-alpine3.16
+      - image: cimg/node:13.8.0
     steps:
       - checkout
       - checkout
