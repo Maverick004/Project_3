@@ -1,29 +1,21 @@
 ---
-- name: 'update and upgrade packages.'
-  become: yes
-  apt:
-    upgrade: yes
-    update_cache: yes
+- name: "Creates backend app directory"
+  file:
+    path: ~/backend-app
+    state: directory
 
-- name: remove unneeded deps
-  become: yes
-  apt:
-    autoremove: yes
-
-- name: install pm2
-  become: yes
-  npm:
-    name: pm2
-    global: yes
-    
-- name: extract artifact
-  become: yes
+- name: "Unarchive backend files"
   unarchive:
-    src: files/artifact.tar.gz
-    dest: .
+    src: .circleci/ansible/roles/deploy/files/artifact.tar.gz
+    dest: ~/backend-app
 
-- name: start app
-  become: yes
+- name: "Installing Node Dependencies"
   shell: |
-    pm2 stop all
+    cd ~/backend-app
+    npm i
+    npm run build
+
+- name: "Executing Node app with PM2"
+  shell: |
+    pm2 stop default
     pm2 start npm -- start
