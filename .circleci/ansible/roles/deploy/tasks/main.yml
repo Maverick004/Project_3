@@ -11,12 +11,6 @@
   apt:
     autoremove: yes
 
-- name: install deps
-  become: yes
-  apt:
-    name: ['nodejs', 'npm']
-    state: latest
-
 - name: install pm2
   become: yes
   npm:
