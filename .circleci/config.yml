@@ -332,20 +332,12 @@ jobs:
           command: |
             cd backend
             npm install
+            npm run build
 
       - run:
           name: Package Backend
           command: |
             cd backend
-            npm run build
-            tar -czf artifact.tar.gz dist/* package*
-
-            cd ..
-            cp backend/artifact.tar.gz .circleci/ansible/roles/deploy/files
-
-      - run:
-          name: Deploy Backend
-          command: |
             touch .env
             echo ENVIRONMENT=production > ".env"
             echo TYPEORM_CONNECTION=postgres >> ".env"
@@ -359,6 +351,12 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
 
+            npm i
+            npm run build
+            cd ..
+            tar -C backend -czvf artifact.tar.gz .
+            mkdir -p ~/project/.circleci/ansible/roles/deploy/files/
+            mv artifact.tar.gz .circleci/ansible/roles/deploy/files/artifact.tar.gz
             cd .circleci/ansible
             echo "Contents of the inventory.txt file is ------$(tail -1 inventory.txt)"
             cat inventory.txt
