@@ -483,7 +483,7 @@ jobs:
 
       - run:
           name: Setup Prometheus Node Exporter
-          command: |
+          command: | 
             cd .circleci/ansible
             cat inventory.txt
             ansible-playbook -i inventory.txt node-exporter.yml
