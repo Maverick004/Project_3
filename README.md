@@ -6,21 +6,20 @@ This project is a critical part of the Udacity Cloud DevOps nanodegree program a
 * Surface critical server errors for diagnosis using centralized structured logging & monitoring.
 
 
-### WHAT DOES THIS PROJECT DO?
+### WHAT DOES THIS PROJECT ACHIEVE?
 
-* Sets up a complete blue deployment with infrastructure including:
+* Set up a complete blue integration & deployment infrastructure including:
     - Static website deployed in an S3 bucket
-    - Cloudfront pointing to the static website
+    - Cloudfront deployment with the aforementioned S3 bucket as origin
 * Creates a green deployment with the following infrastructure:
-    - S3 website frontend
-    - EC2 backend with NodeJS
-    - Postgres Database
+    - S3 website as frontend
+    - EC2 instance with NodeJS as backend
+    - Postgres database to store user data
 * Integration tests with:
-    - Slack integration
+    - Slack/Email integration
     - Frontend and backend smoke testing
 * Sets up centralised structured logging and diagnosis with:
     - Prometheus for monitoring
-    - Gmail for automated notifications
 
 #### Blue-green deployment happens after all tests are complete
 
